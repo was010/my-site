@@ -67,10 +67,7 @@
             background: var(--primary-gradient);
         }
 
-        .day-title {
-            font-size: 1.4rem; font-weight: 800; margin-bottom: 20px;
-            color: #fff;
-        }
+        .day-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 20px; color: #fff; }
 
         .exercise-item { margin-bottom: 30px; border-bottom: 1px solid #2c2c2e; padding-bottom: 20px; }
         .exercise-item:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
@@ -94,32 +91,30 @@
             border-right: 2px solid #3A3A3C; padding-right: 8px;
         }
 
-        /* تنسيق الشبكة للمدخلات */
+        /* تنسيق الشبكة للمدخلات (3 أعمدة الآن) */
         .inputs-grid { 
             display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 10px; 
+            grid-template-columns: 1fr 1fr 1fr; /* 3 خانات متساوية */
+            gap: 8px; 
         }
         
         input {
             width: 100%; background: var(--input-bg);
-            border: none; padding: 12px; border-radius: 10px;
-            color: white; font-size: 16px; 
+            border: none; padding: 12px 5px; border-radius: 10px;
+            color: white; font-size: 15px; 
         }
         
         .input-number { text-align: center; font-weight: 600; }
         
-        /* خانة الملاحظات الجديدة */
+        /* خانة الملاحظات تأخذ العرض الكامل */
         .input-note {
-            grid-column: span 2; /* تأخذ العرض كامل */
-            text-align: right;
-            font-size: 14px;
-            background: rgba(44, 44, 46, 0.6);
-            color: #ccc;
+            grid-column: 1 / -1; 
+            text-align: right; padding-right: 12px;
+            font-size: 14px; background: rgba(44, 44, 46, 0.6); color: #ccc;
         }
 
         input:focus { outline: 2px solid var(--accent); background: #3A3A3C; }
-        ::placeholder { color: #555; font-size: 0.85rem; }
+        ::placeholder { color: #555; font-size: 0.8rem; }
 
         .fab-container {
             position: fixed; bottom: 0; left: 0; right: 0;
@@ -265,10 +260,14 @@
                         </div>
 
                         <div class="inputs-grid">
-                            <input type="number" inputmode="decimal" class="input-number" placeholder="الوزن (kg)" id="w-${dayIndex}-${exIndex}" onkeyup="saveLog()">
-                            <input type="text" class="input-number" placeholder="العدات" id="r-${dayIndex}-${exIndex}" onkeyup="saveLog()">
-                            <!-- خانة الملاحظات المضافة -->
-                            <input type="text" class="input-note" placeholder="✍️ ملاحظاتك الشخصية..." id="n-${dayIndex}-${exIndex}" onkeyup="saveLog()">
+                            <!-- خانة المجموعات الجديدة -->
+                            <input type="number" inputmode="decimal" class="input-number" placeholder="جولات" id="s-${dayIndex}-${exIndex}" onkeyup="saveLog()">
+                            
+                            <input type="number" inputmode="decimal" class="input-number" placeholder="وزن (kg)" id="w-${dayIndex}-${exIndex}" onkeyup="saveLog()">
+                            <input type="text" class="input-number" placeholder="عدات" id="r-${dayIndex}-${exIndex}" onkeyup="saveLog()">
+                            
+                            <!-- خانة الملاحظات -->
+                            <input type="text" class="input-note" placeholder="✍️ ملاحظاتك..." id="n-${dayIndex}-${exIndex}" onkeyup="saveLog()">
                         </div>
                     </div>
                 `;
@@ -329,14 +328,22 @@
             dayContent += `🔴 *${day.name}*\n`;
             
             day.exercises.forEach((ex, exIndex) => {
-                const w = document.getElementById(`w-${dayIndex}-${exIndex}`).value;
-                const r = document.getElementById(`r-${dayIndex}-${exIndex}`).value;
-                const n = document.getElementById(`n-${dayIndex}-${exIndex}`).value; // جلب الملاحظة
+                const s = document.getElementById(`s-${dayIndex}-${exIndex}`).value; // المجموعات
+                const w = document.getElementById(`w-${dayIndex}-${exIndex}`).value; // الوزن
+                const r = document.getElementById(`r-${dayIndex}-${exIndex}`).value; // العدات
+                const n = document.getElementById(`n-${dayIndex}-${exIndex}`).value; // الملاحظات
                 
-                if (w || r || n) {
+                if (s || w || r || n) {
                     dayHasData = true;
                     hasData = true;
-                    dayContent += `▪️ ${ex.name}\n   └ 🦾 ${w ? w + 'kg' : '-'}  ${r ? '| 🔢 ' + r : ''}\n`;
+                    // تنسيق: 3 جولات × 10 عدات @ 60kg
+                    let line = `▪️ ${ex.name}\n   └ `;
+                    if(s) line += `🔢 ${s} جولات `;
+                    if(r) line += `× ${r} `; // تكرارات
+                    if(w) line += `@ 🏋️ ${w}kg`;
+                    
+                    dayContent += line + `\n`;
+
                     if (n) {
                         dayContent += `   └ 📝 ${n}\n`;
                     }

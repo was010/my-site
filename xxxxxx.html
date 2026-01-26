@@ -2,551 +2,507 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متتبع التغذية PRO</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <!-- إعدادات العرض المناسبة للايفون لمنع التكبير وتناسب الشاشة -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>تتبع الماكروز</title>
+    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #00d9ff;
-            --secondary-color: #ff00e6;
-            --background-gradient: linear-gradient(135deg, #1f005c, #004b6e);
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --card-bg: rgba(0, 0, 0, 0.2);
-            --text-color: #f5f5f5;
-            --text-muted: #b0b0b0;
-            --success-color: #00ff87;
-            --warning-color: #ffee00;
-            --danger-color: #ff4d6d;
-        }
-        body { 
-            font-family: 'Cairo', sans-serif; 
-            background: var(--background-gradient);
-            color: var(--text-color); 
-            margin: 0; 
-            padding: 25px;
-            min-height: 100vh;
-        }
-        .container { 
-            max-width: 1000px; 
-            margin: auto; 
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            padding: 25px; 
-            border-radius: 20px; 
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            border: 1px solid var(--glass-border);
-        }
-        header h1 { 
-            color: var(--text-color); 
-            text-align: center; 
-            font-size: 2.5em;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        h2, h3 { 
-            color: var(--text-color); 
-            border-bottom: 1px solid var(--glass-border); 
-            padding-bottom: 10px; 
-            font-weight: 700;
-        }
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin-top: 20px; 
-            font-size: 0.95em; 
-        }
-        th, td { 
-            padding: 12px; 
-            text-align: center; 
-            border: none;
-            border-bottom: 1px solid var(--glass-border);
-        }
-        th { 
-            color: var(--primary-color);
-            background: transparent;
-            font-size: 1.1em;
-        }
-        tr:nth-child(even) { background-color: rgba(0,0,0,0.1); }
-        .highlight { color: var(--warning-color); font-weight: bold; }
-        .small-text { font-size: 0.8em; color: var(--text-muted); }
-        
-        .day-selector { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; }
-        .day-btn { 
-            padding: 10px 18px; 
-            cursor: pointer; 
-            border: 1px solid var(--glass-border);
-            background: var(--glass-bg);
-            color: var(--text-color);
-            font-size: 0.9em; 
-            font-weight: bold; 
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            border-radius: 10px; 
-        }
-        .day-btn:hover { 
-            background: rgba(255, 255, 255, 0.15);
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-        }
-        .day-btn.active { 
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            color: #fff;
-            border: none;
-            padding: 11px 19px;
-            box-shadow: 0 0 15px rgba(0, 217, 255, 0.5), 0 0 10px rgba(255, 0, 230, 0.4);
-            transform: scale(1.05);
-        }
-        .day-btn:active {
-            transform: scale(0.96) !important;
-            transition-duration: 0.1s;
+            --bg-color: #F2F2F7;
+            --card-bg: #FFFFFF;
+            --primary-train: #007AFF; /* أزرق ايفون */
+            --primary-rest: #FF9500; /* برتقالي ايفون */
+            --text-main: #1C1C1E;
+            --text-sec: #8E8E93;
+            --danger: #FF3B30;
+            --success: #34C759;
+            --radius: 20px;
         }
 
-        /* === NEW SMOOTH FORM & INPUT STYLES === */
-        .interactive-form {
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Cairo", sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            color: var(--text-main);
+            -webkit-tap-highlight-color: transparent;
+            padding-bottom: 100px; /* مساحة للزر العائم */
+        }
+
+        /* Header */
+        .header {
+            padding: 20px;
+            padding-top: max(20px, env(safe-area-inset-top));
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 { margin: 0; font-size: 22px; font-weight: 800; }
+        .settings-btn {
+            background: none; border: none; font-size: 24px; cursor: pointer; color: var(--primary-train);
+        }
+
+        /* Toggle Switch (Segmented Control) */
+        .segmented-control {
+            background: #E5E5EA;
+            border-radius: 12px;
+            padding: 4px;
+            display: flex;
+            margin: 20px;
+            position: relative;
+        }
+        .segment-btn {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            font-weight: 600;
+            z-index: 2;
+            cursor: pointer;
+            transition: color 0.3s;
+            font-size: 14px;
+        }
+        .segment-bg {
+            position: absolute;
+            top: 4px; left: 4px; bottom: 4px;
+            width: calc(50% - 4px);
+            background: #fff;
+            border-radius: 9px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            z-index: 1;
+        }
+        /* State specific styles */
+        body.mode-train .segment-bg { transform: translateX(0); }
+        body.mode-rest .segment-bg { transform: translateX(-100%); }
+        body.mode-train { --theme-color: var(--primary-train); }
+        body.mode-rest { --theme-color: var(--primary-rest); }
+        
+        .segment-btn.active { color: var(--text-main); }
+        .segment-btn:not(.active) { color: var(--text-sec); }
+
+        /* Stats Cards */
+        .stats-container {
+            padding: 0 20px;
+            display: grid;
+            gap: 15px;
+        }
+        .macro-card {
             background: var(--card-bg);
             padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
         }
-        .interactive-form label {
-            font-weight: bold;
-            margin-left: 10px;
-            margin-bottom: 8px;
-            display: block;
-        }
-        #food-form input,
-        .interactive-form input,
-        .interactive-form select {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 12px 15px;
+        .macro-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .macro-name { font-weight: 700; font-size: 18px; }
+        .macro-left { font-size: 24px; font-weight: 800; color: var(--theme-color); }
+        .macro-sub { font-size: 13px; color: var(--text-sec); }
+
+        /* Progress Bar */
+        .progress-bg {
+            height: 10px;
+            background: #F2F2F7;
             border-radius: 10px;
-            background: transparent;
-            color: var(--text-color);
-            border: 1px solid var(--glass-border);
-            font-family: 'Cairo', sans-serif;
-            font-size: 1em;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            overflow: hidden;
+            margin-top: 5px;
         }
-        #food-form input::placeholder,
-        .interactive-form input::placeholder {
-            color: var(--text-muted);
-            opacity: 0.8;
+        .progress-fill {
+            height: 100%;
+            background: var(--theme-color);
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.5s ease, background-color 0.3s;
         }
-        #food-form input:focus,
-        .interactive-form input:focus,
-        .interactive-form select:focus {
+        
+        /* Add Food Form */
+        .add-food-card {
+            margin: 20px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        .input-row { display: flex; gap: 10px; margin-top: 10px; }
+        input {
+            width: 100%;
+            padding: 15px;
+            background: #F2F2F7;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px; /* Prevents zoom on iOS */
+            font-family: inherit;
+            box-sizing: border-box;
             outline: none;
-            background-color: var(--glass-bg);
-            border-color: var(--primary-color);
-            box-shadow: 0 0 12px rgba(0, 217, 255, 0.6);
         }
-        .interactive-form select {
-            appearance: none; -webkit-appearance: none; -moz-appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%23f5f5f5' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: left 15px center;
-            padding-left: 45px;
-        }
-        #tools-sidebar .interactive-form {
-            display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
-        }
-        #tools-sidebar .interactive-form select, #tools-sidebar .interactive-form input {
-            width: auto; flex-grow: 1;
-        }
-        #tools-sidebar .interactive-form button {
-            flex-shrink: 0; padding: 12px 15px;
-        }
-        #tools-sidebar .interactive-form #component-result {
-            width: 100%; text-align: center; min-height: 1.2em; margin-top: 5px;
-        }
-        /* ========================================= */
-
-        #nutrition-tracker { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
-        .macro-display { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 25px; }
-        .macro-box { 
-            background: var(--card-bg); 
-            padding: 20px; 
-            border-radius: 12px; 
-            text-align: center; 
-            border: 1px solid var(--glass-border);
-        }
-        .macro-box h4 { margin: 0 0 10px 0; color: var(--text-muted); font-size: 1em;}
-        .macro-value { font-size: 1.8em; font-weight: bold; color: var(--text-color); }
+        input:focus { background: #E5E5EA; }
         
-        #food-form { display: grid; gap: 12px; margin-bottom: 15px;}
-        
-        #food-form button, #reset-day, #save-meal-btn, .quick-add-btn {
-            width: 100%; padding: 12px 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer;
-            transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            will-change: transform, box-shadow;
-        }
-        #food-form button:hover, #reset-day:hover, #save-meal-btn:hover, .quick-add-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-        }
-        #food-form button:active, #reset-day:active, #save-meal-btn:active, .quick-add-btn:active {
-            transform: translateY(-1px) scale(0.98);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+        .btn-add {
+            background: var(--text-main);
+            color: white;
+            width: 100%;
+            padding: 15px;
+            border-radius: 14px;
+            font-weight: 700;
+            border: none;
+            font-size: 16px;
+            margin-top: 15px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        #add-food-btn { background: var(--success-color); color: #000; }
-        #reset-day { background: var(--danger-color); color: #fff; margin-top: 10px;}
-        #save-meal-btn { background-image: linear-gradient(95deg, var(--primary-color), var(--secondary-color)); color: #fff; }
-        .quick-add-btn { background-image: linear-gradient(95deg, var(--secondary-color), #ff4da6); color: #fff; margin-top: 5px; font-size: 0.9em; }
-        
-        .status-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: var(--card-bg); padding: 20px; border-radius: 12px; margin: 25px 0; }
-        .status-box h4 { margin-top: 0; color: var(--text-muted); }
-        .status-box p { font-size: 1.2em; font-weight: bold; color: var(--text-color); margin: 0; }
-        .progress-bar { background: rgba(0,0,0,0.3); border-radius: 5px; height: 10px; margin-top: 10px; overflow: hidden; width: 100%;}
-        .progress-bar-inner { 
-            background-image: linear-gradient(90deg, var(--primary-color), var(--secondary-color)); 
-            height: 100%; 
-            transition: width 0.5s ease;
-            border-radius: 5px;
+        /* Food List */
+        .food-list {
+            padding: 0 20px;
         }
-        
-        #eating-window-controls button { padding: 8px 12px; font-weight: bold; border-radius: 8px; border: none; cursor: pointer; margin-top: 5px; transition: transform 0.2s ease; }
-        #eating-window-controls button:hover { transform: scale(1.05); }
-        #eating-window-controls button:active { transform: scale(0.98); }
-        #start-window-btn { background-color: var(--success-color); color: black; }
-        #cancel-window-btn { background-color: var(--danger-color); color: white; }
+        .food-item {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .food-info h4 { margin: 0 0 5px 0; font-size: 16px; }
+        .food-macros { font-size: 12px; color: var(--text-sec); display: flex; gap: 8px; }
+        .food-macros span { background: #F2F2F7; padding: 2px 6px; border-radius: 4px; }
+        .delete-btn {
+            color: var(--danger);
+            background: rgba(255, 59, 48, 0.1);
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+        }
 
-        @media (max-width: 800px) { #nutrition-tracker { grid-template-columns: 1fr; } .status-bar { grid-template-columns: 1fr; } }
+        /* Modal Settings */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 200;
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: white;
+            width: 85%;
+            border-radius: 20px;
+            padding: 25px;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: popUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popUp {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .modal h2 { margin-top: 0; text-align: center; }
+        .setting-group { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        .setting-group h4 { margin: 0 0 10px 0; color: var(--text-sec); }
+        .setting-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+        .setting-row label { font-size: 14px; font-weight: 600; width: 60px;}
+        .setting-row input { width: 80px; text-align: center; padding: 8px; }
+        
+        .btn-save { background: var(--success); color: white; border: none; padding: 12px; width: 100%; border-radius: 12px; font-size: 16px; font-weight: bold; }
+        .btn-close { background: #E5E5EA; color: #000; border: none; padding: 12px; width: 100%; border-radius: 12px; font-size: 16px; font-weight: bold; margin-top: 10px; }
+
+        /* Reset Button */
+        .reset-container { padding: 20px; text-align: center; }
+        .btn-reset { color: var(--danger); background: none; border: none; font-size: 14px; text-decoration: underline; }
+
     </style>
 </head>
-<body>
-    <!-- محتوى HTML يبقى كما هو بدون تغيير -->
-    <div class="container">
-        <header><h1>متتبع التغذية الأسبوعي PRO</h1></header>
+<body class="mode-train">
 
-        <h2>اختر اليوم</h2>
-        <div id="day-selector" class="day-selector"></div>
+    <!-- Header -->
+    <div class="header">
+        <h1>حاسبة سعراتي</h1>
+        <button class="settings-btn" onclick="openSettings()">⚙️</button>
+    </div>
 
-        <div class="status-bar">
-            <div class="status-box" id="eating-window-display">
-                <h4>نافذة الأكل (8 ساعات)</h4>
-                <p id="window-status-text">اضغط على الزر لبدء العد التنازلي.</p>
-                <div id="eating-window-controls">
-                    <button id="start-window-btn" onclick="startEatingWindow()">ابدأ نافذة الأكل الآن</button>
-                    <button id="cancel-window-btn" onclick="cancelEatingWindow()" style="display:none;">إلغاء</button>
-                </div>
+    <!-- Switcher -->
+    <div class="segmented-control">
+        <div class="segment-bg"></div>
+        <div class="segment-btn active" id="btn-train" onclick="setDay('train')">يوم تمرين 🏋️</div>
+        <div class="segment-btn" id="btn-rest" onclick="setDay('rest')">يوم راحة 🔥</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-container">
+        <!-- Protein -->
+        <div class="macro-card">
+            <div class="macro-header">
+                <span class="macro-name">البروتين</span>
+                <span class="macro-left" id="disp-p">0g</span>
             </div>
-            <div class="status-box" id="weekly-carb-tracker">
-                <h4>الكربوهيدرات المتبقية للأسبوع</h4>
-                <p>0 <span class="small-text">/ 0 جرام</span></p>
-                <div class="progress-bar"><div id="weekly-carb-progress" class="progress-bar-inner" style="width: 100%;"></div></div>
+            <div class="progress-bg"><div class="progress-fill" id="prog-p"></div></div>
+            <div class="macro-sub">المتبقي من أصل <span id="goal-p">0</span>g</div>
+        </div>
+        
+        <!-- Carbs -->
+        <div class="macro-card">
+            <div class="macro-header">
+                <span class="macro-name">الكارب</span>
+                <span class="macro-left" id="disp-c">0g</span>
             </div>
+            <div class="progress-bg"><div class="progress-fill" id="prog-c"></div></div>
+            <div class="macro-sub">المتبقي من أصل <span id="goal-c">0</span>g</div>
         </div>
 
-        <div id="nutrition-content">
-             <h2>متتبع تغذية اليوم الحالي</h2>
-            <div class="interactive-form">
-                <label for="day-type">اختر نوع اليوم:</label>
-                <select id="day-type">
-                    <option value="high">عالي الكربوهيدرات</option>
-                    <option value="mod">متوسط الكربوهيدرات</option>
-                    <option value="low">منخفض الكربوهيدرات</option>
-                </select>
+        <!-- Fat -->
+        <div class="macro-card">
+            <div class="macro-header">
+                <span class="macro-name">الدهون</span>
+                <span class="macro-left" id="disp-f">0g</span>
             </div>
-            
-            <div id="nutrition-tracker">
-                <div id="tracker-main">
-                    <h3>المتبقي من احتياجك اليومي:</h3>
-                    <div class="macro-display" id="macro-remaining"></div>
-                    
-                    <h3>أضف وجبة جديدة:</h3>
-                    <form id="food-form">
-                        <input type="text" id="food-name" placeholder="اسم الوجبة" required>
-                        <div style="display: flex; gap: 5px;">
-                            <input type="number" id="food-protein" placeholder="بروتين" min="0" step="any" required>
-                            <input type="number" id="food-carbs" placeholder="كارب" min="0" step="any" required>
-                            <input type="number" id="food-fat" placeholder="دهون" min="0" step="any" required>
-                        </div>
-                        <button type="submit" id="add-food-btn">أضف للسجل اليومي</button>
-                        <button type="button" id="save-meal-btn">احفظ هذه الوجبة</button>
-                    </form>
-
-                    <h3>سجل وجبات اليوم:</h3>
-                    <table id="food-log-table">
-                        <thead><tr><th>الوجبة</th><th>P</th><th>C</th><th>F</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
-                    <button type="button" id="reset-day">إعادة تعيين اليوم</button>
-                </div>
-                <div id="tools-sidebar">
-                    <h3>مكتبة وجباتك</h3>
-                    <div id="meal-library"></div>
-                    
-                    <h3 style="margin-top:20px;">حاسبة سريعة</h3>
-                    <div class="interactive-form">
-                        <select id="component-item">
-                             <option value="chicken">صدر دجاج (مطبوخ)</option>
-                            <option value="salmon">سلمون (مطبوخ)</option>
-                            <option value="beef">لحم بقري صافي (مطبوخ)</option>
-                            <option value="rice">أرز أبيض (مطبوخ)</option>
-                            <option value="potato">بطاطا (مسلوقة)</option>
-                             <option value="oats">شوفان (جاف)</option>
-                        </select>
-                        <input type="number" id="component-grams" placeholder="الوزن (جرام)" style="width:100px;" step="any">
-                        <button type="button" onclick="calculateComponent()">احسب</button>
-                        <p id="component-result"></p>
-                    </div>
-                </div>
-            </div>
+            <div class="progress-bg"><div class="progress-fill" id="prog-f"></div></div>
+            <div class="macro-sub">المتبقي من أصل <span id="goal-f">0</span>g</div>
         </div>
     </div>
+
+    <!-- Add Food -->
+    <div class="add-food-card">
+        <h3 style="margin-top:0; font-size:16px;">إضافة وجبة</h3>
+        <input type="text" id="in-name" placeholder="اسم الأكلة (مثال: رز ودجاج)">
+        <div class="input-row">
+            <input type="tel" id="in-p" placeholder="بروتين">
+            <input type="tel" id="in-c" placeholder="كارب">
+            <input type="tel" id="in-f" placeholder="دهون">
+        </div>
+        <button class="btn-add" onclick="addFood()">+ تسجيل</button>
+    </div>
+
+    <!-- History -->
+    <div class="food-list" id="food-list-container">
+        <!-- Items go here -->
+    </div>
+
+    <div class="reset-container">
+        <button class="btn-reset" onclick="resetDay()">تصفير وبدء يوم جديد</button>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <h2>تعديل الأهداف</h2>
+            
+            <div class="setting-group">
+                <h4>🏋️ يوم التمرين</h4>
+                <div class="setting-row"><label>بروتين</label><input type="tel" id="set-train-p"></div>
+                <div class="setting-row"><label>كارب</label><input type="tel" id="set-train-c"></div>
+                <div class="setting-row"><label>دهون</label><input type="tel" id="set-train-f"></div>
+            </div>
+
+            <div class="setting-group">
+                <h4>🔥 يوم الراحة</h4>
+                <div class="setting-row"><label>بروتين</label><input type="tel" id="set-rest-p"></div>
+                <div class="setting-row"><label>كارب</label><input type="tel" id="set-rest-c"></div>
+                <div class="setting-row"><label>دهون</label><input type="tel" id="set-rest-f"></div>
+            </div>
+
+            <button class="btn-save" onclick="saveSettings()">حفظ التعديلات</button>
+            <button class="btn-close" onclick="closeSettings()">إغلاق</button>
+        </div>
+    </div>
+
 <script>
-// كود JavaScript يبقى كما هو بدون تغيير
-let myApp = {
-    macros: {
-        high: { protein: 210, carbs: 380, fat: 75 },
-        mod: { protein: 210, carbs: 310, fat: 80 },
-        low: { protein: 210, carbs: 240, fat: 90 }
-    },
-    componentData: {
-        chicken: { p: 31, c: 0, f: 3.6 }, salmon: { p: 25, c: 0, f: 13 }, beef: { p: 26, c: 0, f: 15 },
-        rice: { p: 2.7, c: 28, f: 0.3 }, potato: { p: 2, c: 17, f: 0.1 }, oats: { p: 13, c: 68, f: 6.5 },
-    },
-    state: { currentDayIndex: 0, days: [], mealLibrary: [] }
-};
-let eatingWindowInterval = null;
-
-function createNewDayState(type = 'high') {
-    return { dayType: type, log: [], eatingWindowStartTime: null };
-}
-
-function saveState() { localStorage.setItem('myNutritionApp', JSON.stringify(myApp.state)); }
-function loadState() {
-    const savedState = localStorage.getItem('myNutritionApp');
-    if (savedState) {
-        myApp.state = JSON.parse(savedState);
-        if (!myApp.state.days || myApp.state.days.length !== 7) initializeWeek();
-    } else {
-        initializeWeek();
-    }
-}
-function initializeWeek() {
-    myApp.state.days = Array(7).fill(null).map((_, i) => {
-        if (i === 2 || i === 6) return createNewDayState('high');
-        if (i === 4 || i === 5) return createNewDayState('low');
-        return createNewDayState('mod');
-    });
-    myApp.state.mealLibrary = [];
-    myApp.state.currentDayIndex = 0;
-}
-
-function renderDaySelector() {
-    document.getElementById('day-selector').innerHTML = Array(7).fill('').map((_, i) =>
-        `<button class="day-btn ${i === myApp.state.currentDayIndex ? 'active' : ''}" onclick="switchDay(${i})">اليوم ${i + 1}</button>`
-    ).join('');
-}
-
-function renderAll() {
-    const currentDay = myApp.state.days[myApp.state.currentDayIndex];
-    document.getElementById('day-type').value = currentDay.dayType;
-    renderRemainingMacros();
-    renderFoodLog();
-    updateEatingWindowDisplay();
-    renderWeeklyCarbTracker();
-}
-
-function renderRemainingMacros() {
-    const container = document.getElementById('macro-remaining');
-    const currentDay = myApp.state.days[myApp.state.currentDayIndex];
-    const targets = myApp.macros[currentDay.dayType];
-    const consumed = {
-        protein: currentDay.log.reduce((sum, item) => sum + item.protein, 0),
-        carbs: currentDay.log.reduce((sum, item) => sum + item.carbs, 0),
-        fat: currentDay.log.reduce((sum, item) => sum + item.fat, 0)
+    // القيم الافتراضية من الصورة
+    const defaultTargets = {
+        train: { p: 190, c: 200, f: 40 },
+        rest: { p: 200, c: 0, f: 55 }
     };
-    container.innerHTML = `
-        <div class="macro-box"><h4>بروتين (اليوم)</h4><div class="macro-value">${(targets.protein - consumed.protein).toFixed(1)}g</div></div>
-        <div class="macro-box"><h4>كارب (اليوم)</h4><div class="macro-value">${(targets.carbs - consumed.carbs).toFixed(1)}g</div></div>
-        <div class="macro-box"><h4>دهون (اليوم)</h4><div class="macro-value">${(targets.fat - consumed.fat).toFixed(1)}g</div></div>`;
-}
 
-function renderFoodLog() {
-    document.querySelector('#food-log-table tbody').innerHTML = myApp.state.days[myApp.state.currentDayIndex].log
-        .map(food => `<tr><td>${food.name}</td><td>${food.protein}</td><td>${food.carbs}</td><td>${food.fat}</td></tr>`).join('');
-}
+    let appData = {
+        dayType: 'train',
+        targets: JSON.parse(JSON.stringify(defaultTargets)), // Copy defaults
+        eaten: []
+    };
 
-function renderMealLibrary() {
-    const container = document.getElementById('meal-library');
-    container.innerHTML = myApp.state.mealLibrary.length === 0 ? '<p class="small-text">مكتبتك فارغة.</p>' :
-        myApp.state.mealLibrary.map((meal, index) => `
-            <div><strong>${meal.name}</strong> <span class="small-text">(P:${meal.protein}, C:${meal.carbs}, F:${meal.fat})</span>
-            <button class="quick-add-btn" onclick="quickAddMeal(${index})">إضافة سريعة</button></div>`).join('');
-}
-
-function switchDay(index) {
-    myApp.state.currentDayIndex = index;
-    renderDaySelector();
-    renderAll();
-}
-
-function addFood(food) {
-    myApp.state.days[myApp.state.currentDayIndex].log.push(food);
-    saveState();
-    renderAll();
-}
-
-function resetCurrentDay() {
-    const idx = myApp.state.currentDayIndex;
-    const type = myApp.state.days[idx].dayType;
-    myApp.state.days[idx] = createNewDayState(type);
-    saveState();
-    renderAll();
-}
-
-function changeDayType(type) {
-    myApp.state.days[myApp.state.currentDayIndex].dayType = type;
-    saveState();
-    renderAll();
-}
-
-function startEatingWindow() {
-    const currentDay = myApp.state.days[myApp.state.currentDayIndex];
-    if (!currentDay.eatingWindowStartTime) {
-        currentDay.eatingWindowStartTime = new Date().toISOString();
-        saveState();
-        updateEatingWindowDisplay();
-    }
-}
-
-function cancelEatingWindow() {
-    const currentDay = myApp.state.days[myApp.state.currentDayIndex];
-    currentDay.eatingWindowStartTime = null;
-    saveState();
-    updateEatingWindowDisplay();
-}
-
-function updateEatingWindowDisplay() {
-    clearInterval(eatingWindowInterval);
-    const currentDay = myApp.state.days[myApp.state.currentDayIndex];
-    const statusText = document.getElementById('window-status-text');
-    const startBtn = document.getElementById('start-window-btn');
-    const cancelBtn = document.getElementById('cancel-window-btn');
-
-    if (!currentDay.eatingWindowStartTime) {
-        statusText.innerHTML = 'اضغط على الزر لبدء العد التنازلي.';
-        startBtn.style.display = 'inline-block';
-        cancelBtn.style.display = 'none';
-        return;
+    // Load Data
+    if(localStorage.getItem('iosMacroApp')) {
+        appData = JSON.parse(localStorage.getItem('iosMacroApp'));
+        // Backward compatibility fix if targets missing
+        if(!appData.targets) appData.targets = defaultTargets;
     }
 
-    startBtn.style.display = 'none';
-    cancelBtn.style.display = 'inline-block';
+    // Init
+    updateUI();
 
-    const startTime = new Date(currentDay.eatingWindowStartTime);
-    const endTime = new Date(startTime.getTime() + 8 * 60 * 60 * 1000);
-    const formatTime = (date) => date.toLocaleTimeString('ar-AE', { hour: '2-digit', minute: '2-digit', hour12: true });
-    const pad = (num) => num.toString().padStart(2, '0');
+    function setDay(type) {
+        appData.dayType = type;
+        document.body.className = type === 'train' ? 'mode-train' : 'mode-rest';
+        
+        // Toggle Active Class
+        document.getElementById('btn-train').classList.toggle('active', type === 'train');
+        document.getElementById('btn-rest').classList.toggle('active', type === 'rest');
+        
+        saveData();
+        updateUI();
+    }
 
-    function updateCountdown() {
-        const now = new Date();
-        const diff = endTime - now;
+    function addFood() {
+        const name = document.getElementById('in-name').value;
+        const p = parseFloat(document.getElementById('in-p').value) || 0;
+        const c = parseFloat(document.getElementById('in-c').value) || 0;
+        const f = parseFloat(document.getElementById('in-f').value) || 0;
 
-        if (diff <= 0) {
-            statusText.innerHTML = `<span class="highlight">انتهت نافذة الأكل لهذا اليوم.</span>`;
-            clearInterval(eatingWindowInterval);
-            cancelBtn.style.display = 'none';
-            return;
+        if(!name && p===0 && c===0 && f===0) return;
+
+        appData.eaten.push({
+            id: Date.now(),
+            name: name || 'وجبة سريعة',
+            p, c, f
+        });
+
+        // Clear Inputs
+        document.getElementById('in-name').value = '';
+        document.getElementById('in-p').value = '';
+        document.getElementById('in-c').value = '';
+        document.getElementById('in-f').value = '';
+
+        saveData();
+        updateUI();
+    }
+
+    function deleteFood(id) {
+        if(confirm('حذف هذه الوجبة؟')) {
+            appData.eaten = appData.eaten.filter(i => i.id !== id);
+            saveData();
+            updateUI();
         }
-
-        const hours = Math.floor(diff / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-        statusText.innerHTML = `الوقت المتبقي: <span class="highlight">${pad(hours)}:${pad(minutes)}:${pad(seconds)}</span>
-                                <br><small>تنتهي في: ${formatTime(endTime)}</small>`;
     }
-    
-    updateCountdown();
-    eatingWindowInterval = setInterval(updateCountdown, 1000);
-}
 
-function renderWeeklyCarbTracker() {
-    const container = document.getElementById('weekly-carb-tracker');
-    const weeklyTargetCarbs = myApp.state.days.reduce((total, day) => total + myApp.macros[day.dayType].carbs, 0);
-    const weeklyConsumedCarbs = myApp.state.days.reduce((total, day) => total + day.log.reduce((sum, food) => sum + food.carbs, 0), 0);
-    const remainingWeeklyCarbs = weeklyTargetCarbs - weeklyConsumedCarbs;
-    const progressPercent = weeklyTargetCarbs > 0 ? (remainingWeeklyCarbs / weeklyTargetCarbs) * 100 : 0;
-    container.querySelector('p').innerHTML = `${remainingWeeklyCarbs.toFixed(0)} <span class="small-text">/ ${weeklyTargetCarbs.toFixed(0)} جرام</span>`;
-    document.getElementById('weekly-carb-progress').style.width = `${Math.max(0, progressPercent)}%`;
-}
-
-function quickAddMeal(index) {
-    addFood({...myApp.state.mealLibrary[index], name: `(محفوظ) ${myApp.state.mealLibrary[index].name}`});
-}
-
-function calculateComponent() {
-    const item = document.getElementById('component-item').value;
-    const grams = parseFloat(document.getElementById('component-grams').value);
-    const resultEl = document.getElementById('component-result');
-    if (!grams || grams <= 0) { resultEl.textContent = 'أدخل وزنًا صحيحًا.'; return; }
-    const data = myApp.componentData[item];
-    const p = (data.p * grams / 100).toFixed(1);
-    const c = (data.c * grams / 100).toFixed(1);
-    const f = (data.f * grams / 100).toFixed(1);
-    resultEl.innerHTML = `<span class="highlight">P:${p}g, C:${c}g, F:${f}g</span>`;
-    document.getElementById('food-name').value = `${grams}g ${document.getElementById('component-item').options[document.getElementById('component-item').selectedIndex].text}`;
-    document.getElementById('food-protein').value = p;
-    document.getElementById('food-carbs').value = c;
-    document.getElementById('food-fat').value = f;
-}
-
-document.getElementById('day-type').addEventListener('change', (e) => changeDayType(e.target.value));
-
-document.getElementById('food-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const food = {
-        name: document.getElementById('food-name').value.trim(),
-        protein: parseFloat(document.getElementById('food-protein').value) || 0,
-        carbs: parseFloat(document.getElementById('food-carbs').value) || 0,
-        fat: parseFloat(document.getElementById('food-fat').value) || 0
-    };
-    if (food.name) {
-        addFood(food);
-        this.reset();
-        document.getElementById('component-result').textContent = '';
+    function resetDay() {
+        if(confirm('هل أنت متأكد من بدء يوم جديد؟ سيتم مسح الوجبات.')) {
+            appData.eaten = [];
+            saveData();
+            updateUI();
+        }
     }
-});
-document.getElementById('save-meal-btn').addEventListener('click', function() {
-    const meal = {
-        name: document.getElementById('food-name').value.trim(),
-        protein: parseFloat(document.getElementById('food-protein').value) || 0,
-        carbs: parseFloat(document.getElementById('food-carbs').value) || 0,
-        fat: parseFloat(document.getElementById('food-fat').value) || 0
-    };
-    if (meal.name) {
-        myApp.state.mealLibrary.push(meal);
-        saveState();
-        renderMealLibrary();
-        alert(`تم حفظ "${meal.name}" في مكتبتك!`);
-    } else {
-        alert('الرجاء إدخال اسم للوجبة.');
+
+    function updateUI() {
+        // Apply Body Class for Colors
+        document.body.className = appData.dayType === 'train' ? 'mode-train' : 'mode-rest';
+        document.querySelector('.settings-btn').style.color = appData.dayType === 'train' ? '#007AFF' : '#FF9500';
+
+        // Calculate Totals
+        let total = { p:0, c:0, f:0 };
+        appData.eaten.forEach(item => {
+            total.p += item.p;
+            total.c += item.c;
+            total.f += item.f;
+        });
+
+        const goal = appData.targets[appData.dayType];
+
+        // Update Cards
+        updateCard('p', total.p, goal.p);
+        updateCard('c', total.c, goal.c);
+        updateCard('f', total.f, goal.f);
+
+        // Update List
+        const listDiv = document.getElementById('food-list-container');
+        listDiv.innerHTML = '';
+        appData.eaten.slice().reverse().forEach(item => {
+            listDiv.innerHTML += `
+                <div class="food-item">
+                    <div class="food-info">
+                        <h4>${item.name}</h4>
+                        <div class="food-macros">
+                            <span>P: ${item.p}</span>
+                            <span>C: ${item.c}</span>
+                            <span>F: ${item.f}</span>
+                        </div>
+                    </div>
+                    <div class="delete-btn" onclick="deleteFood(${item.id})">×</div>
+                </div>
+            `;
+        });
     }
-});
-document.getElementById('reset-day').addEventListener('click', () => {
-    if (confirm('هل أنت متأكد؟ سيتم حذف سجل وجبات اليوم الحالي فقط.')) {
-        resetCurrentDay();
+
+    function updateCard(type, current, goal) {
+        const rem = goal - current;
+        const elDisp = document.getElementById(`disp-${type}`);
+        const elGoal = document.getElementById(`goal-${type}`);
+        const elProg = document.getElementById(`prog-${type}`);
+
+        elGoal.innerText = goal;
+        elDisp.innerText = rem.toFixed(0) + (type === 'p' ? 'g' : (type === 'c' ? 'g' : 'g'));
+        
+        // Color Logic
+        if(rem < 0) elDisp.style.color = 'var(--danger)';
+        else elDisp.style.color = 'var(--theme-color)';
+
+        // Progress Bar Width
+        let pct = 0;
+        if(goal > 0) pct = (current / goal) * 100;
+        else if (current > 0) pct = 100; // If goal is 0 but you ate, show full bar
+
+        if(pct > 100) pct = 100;
+        elProg.style.width = `${pct}%`;
+        
+        // Progress Color change if exceeded
+        if(current > goal && goal !== 0) elProg.style.backgroundColor = 'var(--danger)';
+        else elProg.style.backgroundColor = 'var(--theme-color)';
     }
-});
 
-function initializeApp() {
-    loadState();
-    renderDaySelector();
-    renderAll();
-    renderMealLibrary();
-}
+    function saveData() {
+        localStorage.setItem('iosMacroApp', JSON.stringify(appData));
+    }
 
-window.onload = initializeApp;
+    /* --- Settings Logic --- */
+    function openSettings() {
+        document.getElementById('settings-modal').style.display = 'flex';
+        // Fill inputs
+        document.getElementById('set-train-p').value = appData.targets.train.p;
+        document.getElementById('set-train-c').value = appData.targets.train.c;
+        document.getElementById('set-train-f').value = appData.targets.train.f;
+        
+        document.getElementById('set-rest-p').value = appData.targets.rest.p;
+        document.getElementById('set-rest-c').value = appData.targets.rest.c;
+        document.getElementById('set-rest-f').value = appData.targets.rest.f;
+    }
 
+    function closeSettings() {
+        document.getElementById('settings-modal').style.display = 'none';
+    }
+
+    function saveSettings() {
+        appData.targets.train.p = parseFloat(document.getElementById('set-train-p').value) || 0;
+        appData.targets.train.c = parseFloat(document.getElementById('set-train-c').value) || 0;
+        appData.targets.train.f = parseFloat(document.getElementById('set-train-f').value) || 0;
+
+        appData.targets.rest.p = parseFloat(document.getElementById('set-rest-p').value) || 0;
+        appData.targets.rest.c = parseFloat(document.getElementById('set-rest-c').value) || 0;
+        appData.targets.rest.f = parseFloat(document.getElementById('set-rest-f').value) || 0;
+
+        saveData();
+        updateUI();
+        closeSettings();
+    }
 </script>
+
 </body>
 </html>

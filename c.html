@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>الأسبوع 4 | كسر الحواجز</title>
+    <title>جدول رمضان | الوحشية 🌙</title>
     <style>
         :root {
+            /* ألوان رمضانية نارية */
             --bg-color: #000000;
             --card-bg: #1C1C1E;
             --input-bg: #2C2C2E;
-            --primary-gradient: linear-gradient(135deg, #FF9500, #FF3B30);
+            --primary-gradient: linear-gradient(135deg, #FF9500, #FF2D55); /* برتقالي لوردي غامق */
             --text-main: #FFFFFF;
             --text-secondary: #98989D;
             --accent: #FF9500;
@@ -41,16 +42,17 @@
         }
 
         h1 { 
-            margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.5px;
+            margin: 0; font-size: 19px; font-weight: 800; letter-spacing: -0.5px;
             background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
         }
 
-        .rest-day-banner {
-            background: rgba(255, 69, 58, 0.15);
-            border: 1px solid rgba(255, 69, 58, 0.3);
-            color: #FF453A;
+        .ramadan-banner {
+            background: linear-gradient(90deg, #1a0b00, #2b1100);
+            border: 1px solid #4a2500;
+            color: #FF9500;
             padding: 12px; margin: 15px; border-radius: 12px;
             font-size: 0.9rem; font-weight: 600; text-align: center;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
         }
 
         .container { padding: 15px; max-width: 600px; margin: 0 auto; }
@@ -60,6 +62,7 @@
             border-radius: var(--radius);
             padding: 20px; margin-bottom: 25px;
             position: relative; overflow: hidden;
+            border: 1px solid #2c2c2e;
         }
         
         .day-card::before {
@@ -67,7 +70,7 @@
             background: var(--primary-gradient);
         }
 
-        .day-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 20px; color: #fff; }
+        .day-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 20px; color: #fff; }
 
         .exercise-item { margin-bottom: 30px; border-bottom: 1px solid #2c2c2e; padding-bottom: 20px; }
         .exercise-item:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
@@ -85,16 +88,18 @@
         }
 
         .captain-note {
-            display: block; margin-top: 6px;
-            font-size: 0.85rem; color: #8E8E93;
+            display: block; margin-top: 8px;
+            font-size: 0.85rem; color: #a1a1a6;
             font-style: italic; line-height: 1.4;
-            border-right: 2px solid #3A3A3C; padding-right: 8px;
+            border-right: 2px solid #FF9500; padding-right: 8px;
+            background: rgba(255,255,255,0.03);
+            padding: 6px 8px; border-radius: 4px;
         }
 
-        /* تنسيق الشبكة للمدخلات (3 أعمدة الآن) */
+        /* 3 أعمدة: جولات - وزن - عدات */
         .inputs-grid { 
             display: grid; 
-            grid-template-columns: 1fr 1fr 1fr; /* 3 خانات متساوية */
+            grid-template-columns: 0.8fr 1fr 0.8fr; 
             gap: 8px; 
         }
         
@@ -106,7 +111,7 @@
         
         .input-number { text-align: center; font-weight: 600; }
         
-        /* خانة الملاحظات تأخذ العرض الكامل */
+        /* خانة الملاحظات */
         .input-note {
             grid-column: 1 / -1; 
             text-align: right; padding-right: 12px;
@@ -151,12 +156,12 @@
 <body>
 
 <header>
-    <h1>الأسبوع 4: كسر الحواجز 🔥</h1>
+    <h1>جدول رمضان 🌙🔥</h1>
     <button onclick="toggleConfig()" style="background:none; border:none; font-size:20px;">⚙️</button>
 </header>
 
-<div class="rest-day-banner">
-    ⚠️ تذكير الأحد: 12,000 خطوة + Zero Carb
+<div class="ramadan-banner">
+    ✨ تقبل الله طاعتكم يا وحش
 </div>
 
 <div class="container" id="workoutContainer"></div>
@@ -175,7 +180,7 @@
 </div>
 
 <div id="configModal">
-    <h2 style="color:white">JSON تعديل</h2>
+    <h2 style="color:white">تعديل الخطة</h2>
     <textarea id="jsonInput"></textarea>
     <div style="display:flex; gap:10px">
         <button class="btn btn-danger" onclick="toggleConfig()">إغلاق</button>
@@ -184,47 +189,50 @@
 </div>
 
 <script>
+    // --- بيانات رمضان ---
     const defaultPlan = {
-        title: "الأسبوع 4: كسر الحواجز 🔥",
+        title: "جدول رمضان: الوحشية بعد الإفطار 🌙🔥",
         days: [
             {
-                name: "الجمعة: دفع (Push)",
+                name: "اليوم 1: ظهر وباي (Pull)",
                 exercises: [
-                    { name: "Incline DB Press", target: "24kg | 6-8 عدات", note: "جازف بالـ 24kg لو تقدر، أو خلك 22kg وجيب 10 نظيفة" },
-                    { name: "Flat Machine Press", target: "65kg | 10-12 عدة", note: "زيد 5 كيلو وتحدى نفسك" },
-                    { name: "Seated DB Press", target: "18kg | 3×10", note: "نبي الـ 3 جولات كلها 10 عدات كاملة" },
-                    { name: "Lateral Raises", target: "8kg | 12-15 عدة", note: "كمل بنفس الوزن، العصرة فوق أهم شي" },
-                    { name: "Triceps Pushdown", target: "25kg | 12 عدة", note: "جبت 22.5، زيد تكة بسيطة" }
+                    { name: "Lat Pulldown (سحب عالي)", target: "70kg | 3×10", note: "ثبات ثانية بالأسفل" },
+                    { name: "Chest-Supported Row", target: "75kg-80kg | 3×10", note: "الـ 70 صارت سهلة، زيد!" },
+                    { name: "Machine Pullover", target: "45kg | 3×12", note: "تركيز عالاكواع" },
+                    { name: "Face Pulls", target: "35kg | 4×15", note: "حركة بطيئة وتركيز" },
+                    { name: "Spider Curls (باي)", target: "17.5kg-20kg | 3×10", note: "الـ 15 كانت سهلة" },
+                    { name: "Hammer Curls", target: "16kg-18kg | 3×10", note: "تحكم كامل" }
                 ]
             },
             {
-                name: "السبت: سحب (Pull)",
+                name: "اليوم 2: صدر وأكتاف (Push)",
                 exercises: [
-                    { name: "Lat Pulldown", target: "70kg | 3×10-12", note: "الهدف: جيب الـ 10 عدات في الجولة الثالثة كمان" },
-                    { name: "Machine Pullover", target: "35-40kg | 12-15", note: "ركز بالكوع زي ما اتفقنا" },
-                    { name: "Chest-Supported Row", target: "65kg | 10-12", note: "لازم تزيد وزن عشان ظهرك يكبر" },
-                    { name: "Face Pulls", target: "35kg | 15 عدة", note: "ثبت الوزن وزيد التركيز" },
-                    { name: "Barbell Curls", target: "30kg | 10 عدات", note: "حاول توصلها 10 هذا الأسبوع" }
+                    { name: "Incline DB Press", target: "26kg ثم 24kg | 8-10", note: "جولة 1 بـ 26، وجولتين بـ 24" },
+                    { name: "Flat Machine Press", target: "70kg | 3×10", note: "أداء وحشي" },
+                    { name: "Seated DB Press", target: "18kg | 3×10", note: "مدى حركي كامل" },
+                    { name: "Lateral Raises", target: "9kg | 4×15", note: "لا تنزل عن 9 كيلو" },
+                    { name: "Triceps Pushdown", target: "22.5kg | 3×12", note: "قفل الكوع ثانية تحت" }
                 ]
             },
             {
-                name: "الاثنين: أرجل (Legs)",
+                name: "اليوم 3: أرجل (Legs) - الجحيم",
                 exercises: [
-                    { name: "Leg Press", target: "200-220kg | 10-12", note: "ابدأ بـ 200 واختم بـ 220" },
-                    { name: "Leg Extensions", target: "110kg | 12-15", note: "وزنك وحشي، حافظ عليه وركز بالحرق" },
-                    { name: "Lying Leg Curls", target: "50kg | 10-12", note: "الـ 45 كانت سهلة، زيد 5 كيلو" },
-                    { name: "Single Leg Press", target: "45-50kg | 10", note: "هذا التمرين ينحت المؤخرة والفخذ، زيد وزن" },
-                    { name: "Calf Raises", target: "100kg | 15-20", note: "السمانة تحب التكرار العالي" }
+                    { name: "Seated Leg Press", target: "240kg | 3×12", note: "نزول بطيء 3 ثواني ⏳" },
+                    { name: "Seated Leg Curl", target: "75kg | 3×12", note: "زيد الوزن" },
+                    { name: "Leg Extensions", target: "115kg | 3×12", note: "حرق للأمامية" },
+                    { name: "Single Leg Press", target: "65kg | 3×10", note: "لكل رجل" },
+                    { name: "Calf Raises", target: "160kg | 4×20", note: "نار وشرار" }
                 ]
             },
             {
-                name: "الثلاثاء: علوي (Upper Focus)",
+                name: "اليوم 4: علوي (Upper Focus)",
                 exercises: [
-                    { name: "Machine Shoulder Press", target: "55kg | 10-12", note: "الـ 50 جبت فيها 12، تقدر تزيد" },
-                    { name: "Lateral Raises", target: "8kg | 5×15", note: "تمرين النحت. خلك 8 كيلو بس موت نفسك تكرارات" },
-                    { name: "Incline Machine Press", target: "65kg | 10-12", note: "زيد وزن عشان الصدر العلوي يبرز" },
-                    { name: "SuperSet: Bi + Tri", target: "للفشل (Failure)", note: "أهم شي توصل لمرحلة ما تقدر ترفع يدك" },
-                    { name: "Hanging Leg Raises", target: "وزن الجسم | 3×15", note: "ارفع ركبك لصدرك ببطء" }
+                    { name: "Machine Shoulder Press", target: "60kg | 3×10", note: "" },
+                    { name: "Lateral Raises", target: "9kg | 5×15", note: "نحت الأكتاف (5 جولات)" },
+                    { name: "Incline Machine Press", target: "65kg | 3×12", note: "" },
+                    { name: "Face Pulls", target: "35kg | 3×15", note: "تكرار للتركيز" },
+                    { name: "SuperSet: Bi + Tri", target: "Failure", note: "للفشل العضلي" },
+                    { name: "Hanging Leg Raises", target: "Bodyweight | 3×15", note: "بطن" }
                 ]
             }
         ]
@@ -233,7 +241,8 @@
     let currentPlan = defaultPlan;
 
     window.onload = function() {
-        const savedPlan = localStorage.getItem('captainSeif_W4_Plan');
+        // مفتاح جديد لرمضان
+        const savedPlan = localStorage.getItem('captainSeif_Ramadan_Plan');
         if (savedPlan) currentPlan = JSON.parse(savedPlan);
         renderWorkout();
         loadUserLogs();
@@ -260,10 +269,9 @@
                         </div>
 
                         <div class="inputs-grid">
-                            <!-- خانة المجموعات الجديدة -->
+                            <!-- جولات | وزن | عدات -->
                             <input type="number" inputmode="decimal" class="input-number" placeholder="جولات" id="s-${dayIndex}-${exIndex}" onkeyup="saveLog()">
-                            
-                            <input type="number" inputmode="decimal" class="input-number" placeholder="وزن (kg)" id="w-${dayIndex}-${exIndex}" onkeyup="saveLog()">
+                            <input type="number" inputmode="decimal" class="input-number" placeholder="وزن" id="w-${dayIndex}-${exIndex}" onkeyup="saveLog()">
                             <input type="text" class="input-number" placeholder="عدات" id="r-${dayIndex}-${exIndex}" onkeyup="saveLog()">
                             
                             <!-- خانة الملاحظات -->
@@ -290,7 +298,7 @@
         if (newVal && newVal !== currentVal) {
             document.getElementById(`target-${dIndex}-${eIndex}`).innerText = `🎯 ${newVal}`;
             currentPlan.days[dIndex].exercises[eIndex].target = newVal;
-            localStorage.setItem('captainSeif_W4_Plan', JSON.stringify(currentPlan));
+            localStorage.setItem('captainSeif_Ramadan_Plan', JSON.stringify(currentPlan));
             if (navigator.vibrate) navigator.vibrate(50);
         }
     }
@@ -301,11 +309,11 @@
         inputs.forEach(input => {
             if(input.value) logs[input.id] = input.value;
         });
-        localStorage.setItem('captainSeif_W4_Logs', JSON.stringify(logs));
+        localStorage.setItem('captainSeif_Ramadan_Logs', JSON.stringify(logs));
     }
 
     function loadUserLogs() {
-        const logs = JSON.parse(localStorage.getItem('captainSeif_W4_Logs'));
+        const logs = JSON.parse(localStorage.getItem('captainSeif_Ramadan_Logs'));
         if (logs) {
             for (const [id, value] of Object.entries(logs)) {
                 const el = document.getElementById(id);
@@ -315,7 +323,7 @@
     }
 
     function generateReport() {
-        let report = `🔥 *تقرير الأسبوع 4: كسر الحواجز*\n`;
+        let report = `🌙 *تقرير تمرين رمضان* 🔥\n`;
         report += `📅 ${new Date().toLocaleDateString('ar-EG')}\n`;
         report += `------------------\n`;
         
@@ -328,10 +336,10 @@
             dayContent += `🔴 *${day.name}*\n`;
             
             day.exercises.forEach((ex, exIndex) => {
-                const s = document.getElementById(`s-${dayIndex}-${exIndex}`).value; // المجموعات
-                const w = document.getElementById(`w-${dayIndex}-${exIndex}`).value; // الوزن
-                const r = document.getElementById(`r-${dayIndex}-${exIndex}`).value; // العدات
-                const n = document.getElementById(`n-${dayIndex}-${exIndex}`).value; // الملاحظات
+                const s = document.getElementById(`s-${dayIndex}-${exIndex}`).value;
+                const w = document.getElementById(`w-${dayIndex}-${exIndex}`).value;
+                const r = document.getElementById(`r-${dayIndex}-${exIndex}`).value;
+                const n = document.getElementById(`n-${dayIndex}-${exIndex}`).value;
                 
                 if (s || w || r || n) {
                     dayHasData = true;
@@ -339,14 +347,11 @@
                     // تنسيق: 3 جولات × 10 عدات @ 60kg
                     let line = `▪️ ${ex.name}\n   └ `;
                     if(s) line += `🔢 ${s} جولات `;
-                    if(r) line += `× ${r} `; // تكرارات
+                    if(r) line += `× ${r} `;
                     if(w) line += `@ 🏋️ ${w}kg`;
                     
                     dayContent += line + `\n`;
-
-                    if (n) {
-                        dayContent += `   └ 📝 ${n}\n`;
-                    }
+                    if (n) dayContent += `   └ 📝 ${n}\n`;
                 }
             });
             
@@ -385,8 +390,8 @@
         try {
             const newPlan = JSON.parse(document.getElementById('jsonInput').value);
             currentPlan = newPlan;
-            localStorage.setItem('captainSeif_W4_Plan', JSON.stringify(newPlan));
-            localStorage.removeItem('captainSeif_W4_Logs');
+            localStorage.setItem('captainSeif_Ramadan_Plan', JSON.stringify(newPlan));
+            localStorage.removeItem('captainSeif_Ramadan_Logs');
             renderWorkout();
             toggleConfig();
         } catch (e) {
@@ -395,8 +400,8 @@
     }
 
     function clearData() {
-        if(confirm("تصفير الكل؟")) {
-            localStorage.removeItem('captainSeif_W4_Logs');
+        if(confirm("تصفير العدادات؟")) {
+            localStorage.removeItem('captainSeif_Ramadan_Logs');
             document.querySelectorAll('input').forEach(i => i.value = '');
         }
     }
